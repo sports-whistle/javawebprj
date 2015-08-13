@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+
+<script>
+
+function init(){
+	
+	var size = document.body.childNodes.length;
+	var nodes = document.body.childNodes;
+
+	
+	var photos = document.getElementById("photos");                                                                                           
+	var imgs = photos.getElementsByTagName("img");
+	
+	
+	
+	var btnImgChange = document.getElementById("btn-img-change1");
+	btnImgChange.onclick = function(){
+		
+		var comboBoxImg = document.getElementById("combo-box");
+			
+		for(var i=0; i<imgs.length; i++){
+			imgs[i].src = "./"+comboBoxImg.value;
+			imgs[i].style.border ="2px solid pink";
+			imgs[i].style.width = "200px";
+		}
+		
+		
+	};
+	
+	
+	
+	var btnAddText = document.getElementById("btn-add-text");
+	btnAddText.onclick = function(){
+		
+		var photos = document.getElementById("photos");
+		var thelis = photos.getElementsByTagName("li");
+		var li = thelis[0];
+		
+		var txt = document.createTextNode("bla bla bla");
+		li.appendChild(txt);
+		
+		
+	};
+	
+	
+	var btnAddImg = document.getElementById("btn-add-img");
+	btnAddImg.onclick = function(){
+		
+		var photos = document.getElementById("photos");
+		var thelis = photos.getElementsByTagName("li");
+		var li = thelis[0];
+		
+		
+		var img = document.createElement("img");
+		
+		img.src="../images/re.png";
+		
+	
+		li.appendChild(img);
+		
+		
+	};
+	
+	
+	
+	
+}
+	
+
+
+window.addEventListener("load",init);
+
+</script>
+
+<body>
+
+	<ul id="changer">
+		<li>
+			<select id="combo-box">
+				<option value="untitled.png">첫번째 이미지</option>
+				<option value="untitled1.png">두번째 이미지</option>
+				<option value="untitled3.png">세번째 이미지</option>
+			</select>
+			
+			<input id="btn-img-change1" type="button" value ="변경"/>
+		</li>
+		
+		<li>
+			<input type="button" id="btn-add-text" value="add text"/>
+			<input type="button" id="btn-add-img" value="add img"/>
+		</li>
+	</ul>
+
+
+
+
+
+
+	<ul id="photos">
+		<li><img src="http://media4.popsugar-assets.com/files/2014/08/25/586/n/1922153/dc181b42c7077f40_thumb_temp_cover_file157414991408571917.xxxlarge/i/Ariana-Grande-Ponytail.jpg"/></li>
+		<li><img src="http://imgnews.naver.net/image/038/2012/11/16/sjmao201211161038240_59_20121116104219.jpg"/></li>
+		<li><img src="http://pds21.egloos.com/pds/201104/20/19/c0126719_4daeb9155f8b7.jpg"/></li>
+	</ul>
+
+
+
+
+
+</body>
+</html>

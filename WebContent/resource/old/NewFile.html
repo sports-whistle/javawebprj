@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+
+	<script>
+		//var win = open("http://www.naver.com");
+		//oepner ,... win ...
+		// win을통해 새 창(탭)(자식) 조작 open함수에서 반환 값을 받음.. opener를 이용해 새 창에서 기존 창(부모)을 조작
+		
+				
+		//win은 윈도우에 대한 포인터를 갖고 있는 것!
+		var win = null;
+		
+		function btnNewTabClick(){
+	
+				win = open("child-new-file.html","_blank");
+		}
+		
+		function btnNewWinClick(){
+				win = open("child-new-file.html","_blank", "width=500px, height=400px");
+		}
+		
+		function btnCloseTabClick(){
+				win.close();
+		}
+		
+		function init(){
+			var btnNewTab = document.getElementById("btn-new-tab");
+			btnNewTab.onclick = btnNewTabClick;
+			
+			var btnNewWin = document.getElementById("btn-new-win");
+			btnNewWin.onclick = btnNewWinClick;
+			
+			var btnCloseTab = document.getElementById("btn-close-tab");
+			btnCloseTab.onclick = btnCloseTabClick;
+		}
+		
+		
+		window.addEventListener("load", init);
+		
+	</script>
+
+<body>
+
+
+
+	
+		<input type="button" value = "새탭 띄우기" id="btn-new-tab"/>
+		<input type="button" value = "새창 띄우기" id="btn-new-win"/>
+		<input type="button" value = "자식창 닫기" id="btn-close-tab"/>
+	
+</body>
+</html>

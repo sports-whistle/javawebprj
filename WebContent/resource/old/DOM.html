@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script>
+
+function init(){
+	
+	var size = document.body.childNodes.length;
+	var nodes = document.body.childNodes;
+
+	
+	var photos = document.getElementById("photos");                                                                                           
+	var imgs = photos.getElementsByTagName("img");
+	
+	
+	
+	var btnImgChange = document.getElementById("btn-img-change1");
+	btnImgChange.onclick = function(){
+		
+		var comboBoxImg = document.getElementById("combo-box");
+			
+		for(var i=0; i<imgs.length; i++){
+			imgs[i].src = "./"+comboBoxImg.value;
+		}
+		
+		
+	};
+}
+
+
+
+window.addEventListener("load",init);
+
+</script>
+
+<!--엔터를 쳐서 생긴 빈공백은 텍스트 노드가 들어갔다고 인식 하게됨
+-->
+<body>
+
+	<ul id="changer">
+		<li>
+			<select id="combo-box">
+				<option value="untitled.png">첫번째 이미지</option>
+				<option value="untitled1.png">두번째 이미지</option>
+				<option value="untitled3.png">세번째 이미지</option>
+			</select>
+			
+			<input id="btn-img-change1" type="button" value ="변경"/>
+		</li>
+	</ul>
+
+
+
+	<ul id="photos">
+		<li><img src="http://media4.popsugar-assets.com/files/2014/08/25/586/n/1922153/dc181b42c7077f40_thumb_temp_cover_file157414991408571917.xxxlarge/i/Ariana-Grande-Ponytail.jpg"/></li>
+		<li><img src="http://imgnews.naver.net/image/038/2012/11/16/sjmao201211161038240_59_20121116104219.jpg"/></li>
+		<li><img src="http://pds21.egloos.com/pds/201104/20/19/c0126719_4daeb9155f8b7.jpg"/></li>
+	</ul>
+</body>
+</html>
