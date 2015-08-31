@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<link href="../css/reset.css" rel="stylesheet" type="text/css" />
+<style>
+	.hidden{
+		display:none;
+	}
+	
+	.clearfix:after{
+		content: ".";
+		display: block;
+		clear: both;
+		visibility: hidden;
+		line-height: 0;
+		height: 0;
+	}
+
+	#codi{
+		
+		width:900px;
+		height:600px;
+		
+	}
+	
+	#codi-canvas{
+		
+		width:700px;
+		height:600px;
+		background:grey;
+		
+		float:left;
+		
+		position:relative;
+	}
+	
+	#codi-box{
+		
+		width:199px;
+		height:600px;
+		background:green;
+		
+		border-left:1px solid white;
+		
+		float:left;
+		
+		
+		
+		
+	
+	}
+	
+	#codi-box li img{
+		display:block;
+		width:80px;
+		
+		
+		
+	}
+	
+	#codi-box li img:hover{
+		
+	}
+	
+	#codi-box li:hover{
+		
+		/* transform-origin:right top;
+		
+		transform:scaleX(1.2) rotate(7.6deg);
+		opacity:0.5; */
+		
+	}
+	
+	#codi-box li{
+		width:150px;
+		height:150px;
+		border:2px solid black;;
+		background:white;
+		
+	/* 	transition-delay:1s;
+		transition-property:opacity;
+		transition-duration: 1s;
+		 */
+		
+		/* transition: 1s opacity ease-in-out; */
+	/* 	transition: 1s opacity cubic-bezier(0.32, -0.3, 0.69, 1.35); */
+		
+		border:dashed 5px #000000;
+		-moz-border-radius-topleft: 17px;
+		-moz-border-radius-topright:5px;
+		-moz-border-radius-bottomleft:0px;
+		-moz-border-radius-bottomright:27px;
+		-webkit-border-top-left-radius:17px;
+		-webkit-border-top-right-radius:5px;
+		-webkit-border-bottom-left-radius:0px;
+		-webkit-border-bottom-right-radius:27px;
+		border-top-left-radius:17px;
+		border-top-right-radius:5px;
+		border-bottom-left-radius:0px;
+		border-bottom-right-radius:27px;
+	}
+
+</style>
+
+<script type="text/javascript">
+	
+	
+	
+	
+	window.addEventListener("load", function(){
+		var codiList = document.querySelector("#codi-box > div > ul");
+		codiList.addEventListener("click", function(){alert("ttt");	},true);
+		//true면 notification에서 단 것
+		codiList.style.top="0px";
+		
+		
+		/*drag start!!!!*/
+		var imgBox = document.querySelector("#codi-box ul");
+		imgBox.addEventListener("dragstart", function(event){
+			
+				// HTMLImageElement 자료형명, 인터페이스명
+				if(event.target instanceof HTMLImageElement){
+					var data = {code:event.target.dataset.code,
+								src:event.target.dataset.src		
+								};
+					//이 data는 드래그해서 가져갈 데이터.. 나중에는 json 객체로 가져감 지금은 하나만
+					// 드랍한 영역에서 사용할 수 있게하는 전달 매개?? event.dataTransfer.setData
+							
+					event.dataTransfer.setData("text/plain",JSON.stringify(data));
+					// 첫번째 인자, MIME-TYPE
+					event.dataTransfer.effectAllowed = "move";
+					// 데이터를 카피인지, move하는지의 설정
+					// none, copy, link , .. linkMove = link or Move, copyMove
+					
+					//dropEffect 에서 이 effectAllowed가 맞지 않으면 도앚ㄱ 안함
+					// API확인하면! 입문서에서 볼 때 개운하지 않은 부분들 해결 가능! 대략적으로라도!!
+					
+					
+				}else{
+					event.preventDefault();
+				}
+			
+		});
+			
+		
+		var codiCanvas = document.querySelector("#codi-canvas");
+		codiCanvas.addEventListener("dragover", function(event){
+			event.preventDefault();
+		});
+		
+		codiCanvas.addEventListener("drop", function(event){
+			var data = JSON.parse(event.dataTransfer.getData("text/plain"));
+			var img = document.createElement("img");
+			img.src = data.src;
+			img.dataset.code = data.code;
+			
+			img.style.position="absolute";
+			
+			img.style.width = "200px";
+			img.style.height = "200px";
+			
+			img.style.left = event.offsetX - 100 + "px";
+			img.style.top = event.offsetY - 100 +"px";
+			
+			img.addEventListener("mousedown", function(event){
+				dragItem = event.target;
+				
+				mouseOffset.x = event.offsetX;
+				mouseOffset.y = event.offsetY;
+			});
+			
+			event.target.appendChild(img);
+			
+			img.addEventListener("contextmenu",function(event){
+				event.target.style.border = "1px solid red";
+				
+				var ctxMenu = document.createElement("div");
+				ctxMenu.style.width="100px";
+				ctxMenu.style.height="200px";
+				
+				/* ctxMenu.style.left="200px";
+				ctxMenu.style.top="200px"; */
+				
+				
+				ctxMenu.style.position="absolute";
+				ctxMenu.style.border = "1px solid black";
+				
+				
+				ctxMenu.style.left = parseInt(event.target.style.left) + event.offsetX + "px";
+				ctxMenu.style.top = parseInt(event.target.style.top) + event.offsetY + "px";
+				
+				//event.target.parentElement.appendChild(ctxMenu);
+				codiCanvas.appendChild(ctxMenu);
+				
+				
+				var mnItemBringFont = document.createElement("div");
+				mnItemBringFont.style.width = "100px";
+				mnItemBringFont.style.height = "20px";
+				mnItemBringFont.style.background = "blue";
+				mnItemBringFont.style.fontColor="white";
+				mnItemBringFont.textContent ="맨 앞으로";
+				
+				mnItemBringFont.addEventListener("click",function(){
+					img.style.zIndex = 1;
+					
+					if(ctxMenu !=null){
+						codiCanvas.removeChild(ctxMenu);
+						ctxMenu = null;
+						
+					}
+					
+				});
+				
+				ctxMenu.appendChild(mnItemBringFont);
+				
+				event.preventDefault();
+				event.preventDefault();
+			});
+			
+		});
+		
+		
+		
+	
+		
+		var codiBox = document.querySelector("#codi-box");
+		codiBox.addEventListener("click",function(event){
+			if(event.target.nodeName=="LI"){
+				alert("data-code: "+event.target.dataset.code);
+				event.stopPropagation();
+			}else if(event.target.nodeName=="IMG"){
+				alert("target : " + event.target.parentNode.dataset.code);
+				event.stopPropagation();
+			}
+			//alert("target : " + event.target.tagName);
+			event.preventDefault();
+		},true);
+		
+		
+		
+		
+		
+		var btnFile = document.querySelector("#button-box span");
+		btnFile.onclick = function(){
+			//event.stopPropagation();
+			
+			
+			var event = document.createEvent("MouseEvent");
+			event.initEvent("click",true,true);
+			
+			var inputFile = document.querySelector("#button-box > input[type=file]");
+			inputFile.dispatchEvent(event);
+		};
+		
+		
+		var btnPrev = document.querySelector("#codi-box > div:first-child");
+		
+		btnPrev.addEventListener("click",function(){
+			
+			alert("prev");
+			
+		});
+		
+		
+		function move(target, by){
+			
+			var from = parseInt(target.style.top);	
+			var to = from + by;
+			
+			//codiList.style.top = parseInt(codiList.style.top) - 300 + "px";
+			var id = setInterval(function(){
+				/* 애니메이션을 위한 프레임 연산 */
+				console.log(from+"px");
+				if(from <to)
+					clearInterval(id);
+				from += by/10;
+				codiList.style.top = from+"px";
+			},100);
+			
+		}
+		
+		var btnNext = document.querySelector("#codi-box > div:last-child");
+		btnNext.addEventListener("click",function(){
+			move(codiList,-300);
+			
+		});
+		
+		
+		var dragItem = null;
+		var mouseOffset = {x:0, y:0};
+		
+		//var h1 = document.querySelector("body h1");
+		document.addEventListener("mousemove", function(event){
+			//h1.textContent = event.x+", " + event.y;
+			if(dragItem!=null){
+			//dragItem.style.left = event.x - mouseOffset.x + document.body.scrollLeft +"px";
+			dragItem.style.left = event.pageX - mouseOffset.x +"px";
+			dragItem.style.top = event.pageY - mouseOffset.y +"px";
+			
+			}
+			
+			
+		});
+		
+		
+		
+		document.addEventListener("mouseup", function(event){
+			if(dragItem!=null){
+				dragItem=null;
+			}
+			
+		});	
+		
+		
+		
+		var btnSave = document.querySelector("#button-box span:last-child");
+		btnSave.addEventListener("click",function(){
+			var imgs = codiCanvas.querySelectorAll("img");
+			
+			data = "[";
+			for(var i=0;i<imgs.length;i++){
+			var item = "{'code': '"  +imgs[0].dataset.code+  "', 'x':"  +imgs[0].style.left+  ", 'y':"  +imgs[0].style.top+  "}";
+				data += item +",";
+				
+				if(i<imgs.length)
+					data += item;
+				else
+					data += item + ",";
+			}
+			
+			data += "]";
+			
+			//xhr v2
+			var request = new window.XMLHttpRequest();
+			client.open("POST", "../../save");
+			request.setRequestHeader("Content-Type","text/plain;charset=UTR-8");
+			request.send(data);
+			
+			
+			
+		});
+		
+		
+	
+		
+		
+	});
+	
+	
+	
+	
+	
+	
+	
+	
+</script>
+
+<body>
+	<section id="codi">
+	<h1>나의 코디</h1>
+	<div class="clearfix">
+		<div id="codi-canvas"></div>
+		<div id="codi-box">
+		<div style="cursor:pointer; background:#f4f4f4;">이전</div>
+		<div style="height:500px; border:1px solid red; overflow:hidden; position:relative;">
+			
+			<ul style="position:absolute;">
+				<li data-code="1">
+					<img draggable='true' data-code="1" data-src="./fashion-images/acc.png" src="./fashion-images/acc.png"/>
+				</li>
+				<li data-code="2">
+					<img draggable='true' data-code="2" data-src="./fashion-images/bottom.png" src="./fashion-images/bottom.png"/>
+				</li>
+				<li data-code="3">
+					<img draggable='true' data-code="3" data-src="./fashion-images/onepiece.png" src="./fashion-images/onepiece.png"/>
+				</li>
+				<li data-code="4">
+					<img draggable='true' data-code="4" data-src="./fashion-images/top.png" src="./fashion-images/top.png"/>
+				</li>
+				<li data-code="5">
+					<img draggable='true' data-code="5" src="./fashion-images/top.png"/>
+				</li>
+				<li data-code="6">
+					<img src="./fashion-images/top.png"/>
+				</li>
+			</ul>
+			
+		</div>
+		<div style="cursor:pointer; background:#f4f4f4;">다음</div>
+		</div>
+	</div>
+	
+	<div id="button-box">
+		<input type="file" id="f" style="display:none;"/>
+		<span style="backgrund:pink; cursor:pointer;">파일선택</span>
+		<span style="backgrund:green; cursor:pointer;">코디저장</span>
+		
+		
+	</div>
+	</section>
+	
+	<div id="ctx-menu">
+		<ul>
+			<li>맨 앞으로</li>
+			<li>맨 뒤로</li>
+			<li>기타</li>
+		</ul>
+	</div>
+	<!-- z-index 눈으로 보여지는 것 뿐만 아니라, 실제로 각각의요소들을 적재하고있는 스택이 었어야한다. -->
+</body>
+</html>

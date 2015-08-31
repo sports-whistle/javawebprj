@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script type="text/javascript">
+	
+	function one(){
+	 var a = 10;
+		return function(){
+			a+=10;
+			
+			return function(){
+				
+				return a;
+			}
+		}
+	}
+	var c = one();
+	var c2 = c();
+	var c3 = c2();
+	
+	alert(c3);
+	
+</script>
+<body>
+	<input id="hey" type="button" value="click"/>
+</body>
+</html>

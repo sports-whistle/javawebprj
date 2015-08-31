@@ -1,5 +1,7 @@
 package com.newlecture.web.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -11,5 +13,11 @@ public class HomeController {
 	public String index()
 	{
 		return "home.index";
+	}
+	
+	@RequestMapping("save")
+	public void saveCodi(HttpServletRequest request){
+		String test = request.getParameter("data");
+		
 	}
 }

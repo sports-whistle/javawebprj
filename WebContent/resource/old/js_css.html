@@ -43,8 +43,7 @@ function init(){
 		
 		var txt = document.createTextNode("bla bla bla");
 		li.appendChild(txt);
-		
-		
+			
 	};
 	
 	
@@ -65,6 +64,76 @@ function init(){
 		
 		
 	};
+	
+	
+	var btnDelChild = document.getElementById("btn-del-child");
+	btnDelChild.onclick = function(){
+		
+		var target = document.getElementById("photos");
+		var thelis = photos.getElementsByTagName("li");
+		var li = thelis[0];
+		
+		li.removeChild(li.lastChild);
+	};
+	
+	var btnCloneNode = document.getElementById("btn-clone-node");
+	btnCloneNode.onclick = function(){
+		
+		var target = document.getElementById("photos");
+		var thelis = photos.getElementsByTagName("li");
+		var t = thelis[0];
+		
+		
+		var cloned = t.cloneNode(true);
+		
+		photos.appendChild(cloned);
+		
+		li.removeChild(li.lastChild);
+	};
+	
+	var btnExchangeNodes = document.getElementById("btn-exchange-nodes");
+	btnExchangeNodes.onclick = function(){
+		
+		var boxes = document.getElementById("photos").getElementsByTagName("input");
+		
+		
+		//유효성 검사
+		var cntChecked = 0;
+		for(var i=0;i<boxes.length;i++){
+			
+			if(boxes[i].checked==true){
+				cntChecked++;
+			}
+		}
+		
+		
+		if(cntChecked!=2){
+			alert("노드 두개만!");
+		}
+		
+		//교환
+		var lis = [];
+		
+		for(var i=0;i<boxes.length;i++){
+			if(boxes[i].checked==true){
+				lis.push(boxes[i].parentNode);
+			}
+		}
+		
+		var emptyNode = document.createElement("li");
+		var temp = photos.insertBefore(emptyNode,lis[0]);
+		var node = photos.removeChild(lis[0]);
+		lis[0] = lis[1];
+		photos.insertBefore(node,temp);
+		photos.removeChild(temp);
+	/* 	var nodeNext = node.nextSibiling;
+		photos.insertBefore(nodeTemp,lis[1]);
+		photos.insertBefore
+		lis[0] = lis[1];
+		lis[1] = nodeTemp;
+		nodeTemp=0; */
+			
+	};	
 	
 	
 	
@@ -93,6 +162,9 @@ window.addEventListener("load",init);
 		<li>
 			<input type="button" id="btn-add-text" value="add text"/>
 			<input type="button" id="btn-add-img" value="add img"/>
+			<input type="button" id="btn-del-child" value="del child"/>
+			<input type="button" id="btn-clone-node" value="clone child"/>
+			<input type="button" id="btn-exchange-nodes" value="두개의 노드 교체"/>
 		</li>
 	</ul>
 
@@ -102,9 +174,9 @@ window.addEventListener("load",init);
 
 
 	<ul id="photos">
-		<li><img src="http://media4.popsugar-assets.com/files/2014/08/25/586/n/1922153/dc181b42c7077f40_thumb_temp_cover_file157414991408571917.xxxlarge/i/Ariana-Grande-Ponytail.jpg"/></li>
-		<li><img src="http://imgnews.naver.net/image/038/2012/11/16/sjmao201211161038240_59_20121116104219.jpg"/></li>
-		<li><img src="http://pds21.egloos.com/pds/201104/20/19/c0126719_4daeb9155f8b7.jpg"/></li>
+		<li><input type="checkbox"/><img src="untitled.png"/></li>
+		<li><input type="checkbox"/><img src="untitled1.png"/></li>
+		<li><input type="checkbox"/><img src="untitled3.png"/></li>
 	</ul>
 
 

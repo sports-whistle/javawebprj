@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+
+	<script>
+	
+	// 1. 장막을 원래 있느데 안보이게 했다가 보이게 ! 2. 동적으로 새로 만들어 붙이기!
+	// 이 두가지 방식의 장단점 1. 번은 퍼블리셔가 만들어야함 , 스크립트 개발자 X
+	// 2. 스크립트 개발자가 만들어야함...
+	// 여기서 정의 했던게 그대로 사용되는지, 수정할 필요가 있는지... .. 동적이면 수정을 많이 해야함
+	// 숨겼던걸 보이는 건 속도가 더 빠름.. 
+	
+	function showDialogue(url){
+		var dlg= document.createElement("div");
+	 	
+		
+		dlg.style.position="absolute";
+		dlg.style.left="0px";
+		dlg.style.top="0px";
+		dlg.style.width="100%";
+		dlg.style.height="100%";
+		dlg.style.opacity="0.5";
+		dlg.style.background="black";
+
+		var body = document.getElementsByTagName("body");
+		body[0].appendChild(dlg);
+		
+		
+		
+		
+		
+		var docWidth = window.innerWidth;
+		var docHeight = window.innerHeight;
+		
+		
+		
+		var width = 700;
+		var height = 500;
+		
+		var adoptedCenterX = docWidth/2 - width/2;
+		var adoptedCenterY = docHeight/2 - height/2;
+		
+		
+	
+		var dialog= document.createElement("div");
+		
+		
+		dialog.style.position="absolute";
+		dialog.style.left= adoptedCenterX + "px";
+		dialog.style.top= adoptedCenterY + "px";
+		dialog.style.width= width+"px";
+		dialog.style.height= height + "px";
+		dialog.style.background="pink";
+		//view.style.textAlign = "center";
+		//view.style.lineHeight = height+"px";
+		//var body = document.getElementsByTagName("body");
+		document.body.appendChild(dialog);
+		 
+		var view = document.createElement("div");
+		view.style.background="beige";
+		dialog.appendChild(view);
+		
+		
+		var imgLoader=document.createElement("img");
+		imgLoader.src="ajax-loader.gif";
+		dialog.appendChild(imgLoader);
+		
+		// close button
+		
+		var btnClose = document.createElement("input");
+		btnClose.type="button";
+		btnClose.value="close";
+		
+		btnClose.style.position = "absolute";
+		btnClose.style.right = "-0px";
+		btnClose.style.top = "-0px";
+		
+		
+		btnClose.onclick = function(){
+			//var pdlg = dlg.parentNode;
+			
+			//dlg.removeChild(view);
+			//pdlg.removeChild(dlg);
+			document.body.removeChild(dialog);
+			document.body.removeChild(dlg);
+		}
+		dialog.appendChild(btnClose);
+		
+		
+		//----------------------------
+		//브라우저 자체에는 TCP/IP네트워크가 불가능 했었음
+		// IE에는 샌드박스를 벗어나라고 꼬드기는 객체가 있었음. ActiveX 를 로드 하는 라이브러리
+		// 시스템에 있는 엑트브엑스를 로드할 수 있었음! ㄷㄷㄷ
+		//Mircrosoft.XMLHTTP 웹으로 XML을 오쳥할수 있게하는 객체
+		//var hxr = new ActiveXObject("Mircrosoft.XMLHTTP");
+		// 와 이게 너무 좋았었음
+		// 마소 에서 벗어난 벤더들.. 파폭, 사파리, 오페라 얘들이 이기능을 탐냄. 이기능을 js 기술자들이 원하는데 없네 ..
+		// 그래서 배껴옴 ㅋㅋㅋ 그래서 생긴 var hxr = window.XMLHttpRequest();
+		var request = new XMLHttpRequest();
+		// 다른 브라우저에는 이런 형식, 브라우저에 꼽아놈. 배껴서 꼽아 놨었음
+		// IE는 아이러니하게 안됐지
+		// IE 7.0부터는 둘다 됨
+		// 그래서 이제 7.0 안쓰니까.. 표준으로 지원 되서
+		// 밑에 구문은 안씀
+		//var hxr = new ActiveXObject("Mircrosoft.XMLHTTP");
+		
+		request.open("GET", url, true);
+		// 여기서 받는게 문자열이든 xml이든 json이든 노상관
+		// false면  동기형 true면 비동기 아얘 빼도 비동기// 일단 비동기가 기본!
+		
+		request.send(null);
+		// 추가적으로 전달할게 있으면, 이 안에 인자 넣음 아니면 null
+		// 기다릴 수도 있고 다른 일 할 수도 있음/ 안기다리면 비 동기형
+		// 이게 원래 원격에 있으면 좀 걸림 ㅋㅋ
+		
+		// 애는 상태가 5번 변경되기때문에 5번 호출이 된다. if 를 붙여서 분기 실행
+		request.onreadystatechange = function(){
+		if(request.readyState==4){
+			
+			view.innerHTML += request.responseText;
+			dialog.removeChild(imgLoader);
+		//innerHtml 이렇게 하면 안쪽에 html구조를 만들어줌
+		// innerHtml = 하면 안쪽에 것들이 없어짐
+		// innerHTml += 하면 누적 
+
+		}
+		//*** 동기 *** true면 응답을 기다리지 않고 바로 다음거 실행함
+		//** 위임하기 위한 함수 정의!!!
+		
+		//** 똑같이 보인다.
+		
+		}
+	}
+	
+	function init(){
+		var btnShowDlg = document.getElementById("btn-show-dlg");
+		btnShowDlg.onclick=function(){
+			showDialogue("partial1.jsp");
+		};
+		
+	}
+	
+	window.addEventListener("load", init);
+	</script>
+<body>
+	
+	<input type="button" value="창 띄우기" id="btn-show-dlg"/>
+	
+	<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+	
+	
+</body>
+</html>
